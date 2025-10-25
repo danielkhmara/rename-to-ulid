@@ -1,13 +1,11 @@
 import os
 import ulid
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-folder_path = os.path.join(script_dir, "folder-for-rename")
-
-for filename in os.listdir(folder_path):
-   file_path = os.path.join(folder_path, filename)
-   if os.path.isfile(file_path):
-      ext = os.path.splitext(filename)[1]
-      new_name = f"{ulid.new()}{ext}"
-      new_path = os.path.join(folder_path, new_name)
-      os.rename(file_path, new_path)
+base_dir = os.path.join(os.path.dirname(__file__), 'folder-for-rename')
+for root, _, files in os.walk(base_dir):
+   for f in sorted(files):
+      path = os.path.join(root, f)
+      ext = os.path.splitext(f)[1]
+      new_name = str(ulid.new()) + ext
+      new_path = os.path.join(root, new_name)
+      os.rename(path, new_path)
